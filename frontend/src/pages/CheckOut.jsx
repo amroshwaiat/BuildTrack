@@ -53,7 +53,7 @@ useEffect(() => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/products', {
+        const res = await axios.get('https://buildtrack-s2us.onrender.com/api/products', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setProducts(res.data);
@@ -69,7 +69,7 @@ useEffect(() => {
   const handleCheckOut = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/products/checkout', form, {
+      const res = await axios.post('https://buildtrack-s2us.onrender.com/api/products/checkout', form, {
         headers: { Authorization: `Bearer ${token}` }
       });
      alert(res.data.message || 'Check-out completed and inventory updated successfully!');

@@ -51,7 +51,7 @@ const navigate = useNavigate();
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/products', {
+        const res = await axios.get('https://buildtrack-s2us.onrender.com/api/products', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setProducts(res.data);
@@ -66,7 +66,7 @@ const navigate = useNavigate();
   const handleCheckIn = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/products/checkin', form, {
+      const res = await axios.post('https://buildtrack-s2us.onrender.com/api/products/checkin', form, {
         headers: { Authorization: `Bearer ${token}` }
       });
     alert(res.data.message || 'Check-in completed and inventory updated successfully!');

@@ -24,7 +24,7 @@ export default function Employees() {
 // جلب المستخدمين
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/auth/users', {
+      const res = await axios.get('https://buildtrack-s2us.onrender.com/api/auth/users', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(res.data);
@@ -36,7 +36,7 @@ export default function Employees() {
   const handleDeleteUser = async (id) => {
     if (!window.confirm('Are you sure you want to delete this user?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/auth/users/${id}`, {
+      await axios.delete(`https://buildtrack-s2us.onrender.com/api/auth/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
     alert('User deleted successfully!');
@@ -53,7 +53,7 @@ export default function Employees() {
     const newPassword = prompt('Enter new password (leave blank if unchanged):');
 
     try {
-      await axios.put(`http://localhost:5000/api/auth/users/${id}`, {
+      await axios.put(`https://buildtrack-s2us.onrender.com/api/auth/users/${id}`, {
         role: newRole,
         password: newPassword
       }, {
@@ -75,7 +75,7 @@ useEffect(() => {
   const handleAddUser = async (e) => {
     e.preventDefault();
     try {
-     const res = await axios.post('http://localhost:5000/api/auth/users', form, {
+     const res = await axios.post('https://buildtrack-s2us.onrender.com/api/auth/users', form, {
   headers: { Authorization: `Bearer ${token}` }
 });
       alert(res.data.message || 'User added successfully!');

@@ -53,7 +53,7 @@ const userImage = user?.profile_image || user?.profileImage;
   // جلب المنتجات من الـ Backend
   const fetchProducts = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/products', {
+      const res = await axios.get('https://buildtrack-s2us.onrender.com/api/products', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProducts(res.data);
@@ -72,13 +72,13 @@ const userImage = user?.profile_image || user?.profileImage;
   try {
     if (isEditing) {
       // طلب التعديل (PUT)
-      await axios.put(`http://localhost:5000/api/products/${editId}`, form, {
+      await axios.put(`https://buildtrack-s2us.onrender.com/api/products/${editId}`, form, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert('Product updated successfully!');
     } else {
       // طلب الإضافة الجديدة (POST)
-      await axios.post('http://localhost:5000/api/products', form, {
+      await axios.post('https://buildtrack-s2us.onrender.com/api/products', form, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert('Product added successfully!');
@@ -112,7 +112,7 @@ const handleEdit = (product) => {
 const handleDelete = async (id) => {
   if (window.confirm('Are you sure you want to delete this product?')) {
     try {
-      await axios.delete(`http://localhost:5000/api/products/${id}`, {
+      await axios.delete(`https://buildtrack-s2us.onrender.com/api/products/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProducts(products.filter(p => p.id !== id));

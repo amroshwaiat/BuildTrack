@@ -37,7 +37,7 @@ const userImage = user?.profile_image || user?.profileImage;
     try {
       // 🔴 هنا قمنا بتعريف res لحفظ الرد القادم من السيرفر
       const res = await axios.put(
-        'http://localhost:5000/api/auth/profile',
+        'https://buildtrack-s2us.onrender.com/api/auth/profile',
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );
