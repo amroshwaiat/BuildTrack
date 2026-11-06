@@ -52,6 +52,7 @@
 
 // module.exports = sendLowStockAlert;
 const { Resend } = require('resend');
+const pool = require('../config/db'); // أو المسار الصحيح لملف الـ db عندك
 const resend = new Resend(process.env.RESEND_API_KEY); // ضع المفتاح في ملف الـ .env
 
 const sendLowStockAlert = async (productName, currentQuantity, minStockLevel) => {
