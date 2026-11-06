@@ -1,19 +1,19 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
-
+import { useNavigate } from 'react-router-dom';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useContext(AuthContext);
-
+const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post('https://buildtrack-s2us.onrender.com/api/auth/login', { email, password });
       login(res.data.user, res.data.token);
      alert('Login successful!');
-      window.location.href = '/BuildTrack/#/inventory';
+     navigate('/');
     } catch (err) {
       alert(err.response?.data?.message || 'Login failed, please check your credentials.');
     }

@@ -8,14 +8,11 @@ import CheckIn from './pages/CheckIn';
 import Logs from './pages/Logs';
 import Employees from './pages/Employees';
 import Profile from './pages/Profile';
-// داخل الـ Routes:
-import { BrowserRouter } from 'react-router-dom';
 
 function AppRoutes() {
   const { user } = useContext(AuthContext);
 
   return (
-     <BrowserRouter basename="/BuildTrack">
     <Router>
       <Routes>
         <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
@@ -23,11 +20,10 @@ function AppRoutes() {
         <Route path="/checkout" element={user ? <CheckOut /> : <Navigate to="/login" />} />
         <Route path="/checkin" element={user ? <CheckIn /> : <Navigate to="/login" />} />
         <Route path="/logs" element={user ? <Logs /> : <Navigate to="/login" />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={user ? <Profile /> : <Navigate to="/login" />} />
         <Route path="/employees" element={user ? <Employees /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
-     </BrowserRouter>
   );
 }
 

@@ -15,9 +15,9 @@ const userImage = user?.profile_image || user?.profileImage;
   useEffect(() => {
     const fetchLogs = async () => {
       try {
-        const res = await axios.get('https://buildtrack-s2us.onrender.com/api/logs', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+   const res = await axios.get('https://buildtrack-s2us.onrender.com/api/products/logs', {
+    headers: { Authorization: `Bearer ${token}` }
+});
         setLogs(res.data);
       } catch (err) {
        console.error('Error fetching logs', err);
