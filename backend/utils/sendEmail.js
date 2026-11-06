@@ -52,40 +52,43 @@
 
 // module.exports = sendLowStockAlert;
 const { Resend } = require('resend');
-const pool = require('../config/db'); // أو المسار الصحيح لملف الـ db عندك
-const resend = new Resend(process.env.RESEND_API_KEY); // ضع المفتاح في ملف الـ .env
+const pool = require('../config/db'); // تأكد من مسار الاتصال بقاعدة البيانات لديك
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-const sendLowStockAlert = async (productName, currentQuantity, minStockLevel) => {
-    try {
-        const adminsResult = await pool.query("SELECT email FROM users WHERE role = 'admin'");
-        const adminEmails = adminsResult.rows.map(admin => admin.email);
+const sendLowStockAlert = async (productName, currentStock, minStock) => {
+  try {
+    // 1. جلب إيميلات جميع الآدمنية من قاعدة البيانات
+    const adminsResult = await pool.query("SELECT email FROM users WHERE role = 'admin'");
+    const adminEmails = adminsResult.rows.map(row => row.email);
 
-        if (adminEmails.length === 0) {
-            console.log('⚠️ لا يوجد مديرين للإرسال.');
-            return;
-        }
-
-        // إرسال البريد عبر الـ HTTP API (منفذ 433 المفتوح دائماً)
-        const data = await resend.emails.send({
-            from: 'BuildTrack System <onboarding@resend.dev>', // أو ايميلك الموثق
-            to: adminEmails,
-            subject: `⚠️ تنبيه: انخفاض المخزون لمنتج ${productName}`,
-            html: `
-                <div dir="rtl" style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
-                    <h2 style="color: #d9534f;">⚠️ تنبيه: وصل المنتج إلى الحد الأدنى</h2>
-                    <p><strong>اسم المنتج:</strong> ${productName}</p>
-                    <p><strong>الكمية الحالية:</strong> ${currentQuantity}</p>
-                    <p><strong>الحد الأدنى المطلوب:</strong> ${minStockLevel}</p>
-                    <hr/>
-                    <p style="font-size: 12px; color: #777;">لإدارة المخزون BuildTrack تم إرسال هذا الإشعار تلقائياً لجميع مديري نظام.</p>
-                </div>
-            `
-        });
-
-        console.log('✅ تم إرسال إشعار المخزون لجميع الأدمنز بنجاح عبر API', data);
-    } catch (err) {
-        console.error('❌ خطأ تفصيلي في إرسال البريد:', err);
+    if (adminEmails.length === 0) {
+      console.log('⚠️ لا يوجد مسؤولون (Admins) مسجلون لإرسال الإشعار.');
+      return;
     }
+
+    // 2. إرسال البريد لجميع الآدمنية دفعة واحدة
+    const data = await resend.emails.send({
+      from: 'BuildTrack System <onboarding@resend.dev>', // أو الدومين الخاص بك بعد توثيقه
+      to: adminEmails, // مصفوفة تحوي إيميلات جميع الآدمنية المستخرجين من قاعدة البيانات
+      subject: `⚠️ تنبيه: انخفاض المخزون لمنتج ${productName}`,
+      html: `
+        <div dir="rtl" style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+          <h2 style="color: #d9534f;">⚠️ تنبيه انخفاض المخزون</h2>
+          <p>عذراً، وصل المنتج التالي إلى الحد الأدنى:</p>
+          <ul>
+            <li><strong>اسم المنتج:</strong> ${productName}</li>
+            <li><strong>الكمية الحالية:</strong> ${currentStock}</li>
+            <li><strong>الحد الأدنى المطلوب:</strong> ${minStock}</li>
+          </ul>
+          <p>يرجى إعادة تعبئة المخزون في أقرب وقت ممكن عبر نظام BuildTrack.</p>
+        </div>
+      `
+    });
+
+    console.log('✅ تم إرسال إشعار المخزون بنجاح لجميع الآدمنية:', data);
+  } catch (error) {
+    console.error('❌ خطأ تفصيلي في إرسال البريد:', error.message);
+  }
 };
 
 module.exports = sendLowStockAlert;
